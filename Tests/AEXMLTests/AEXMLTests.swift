@@ -38,8 +38,9 @@ class AEXMLTests: XCTestCase {
         var xmlDocument = AEXMLDocument()
         
         do {
-            let data = try Data.init(contentsOf: url)
-            xmlDocument = try AEXMLDocument(xml: data)
+            // let data = try Data.init(contentsOf: url)
+            // xmlDocument = try AEXMLDocument(xml: data)
+            xmlDocument = try AEXMLDocument(file: url)
         } catch {
             print(error)
         }

@@ -67,6 +67,12 @@ open class AEXMLDocument: AEXMLElement {
         self.init(options: options)
         try loadXML(xml)
     }
+
+
+    public convenience init(file url: URL, options: AEXMLOptions = AEXMLOptions()) throws {
+        self.init(options: options)
+        try loadXML(url)
+    }
     
     /**
         Convenience initializer - used for parsing XML string (by calling `init(xmlData:options:)` internally).
@@ -96,6 +102,13 @@ open class AEXMLDocument: AEXMLElement {
         children.removeAll(keepingCapacity: false)
         let xmlParser = AEXMLParser(document: self, data: data)
         try xmlParser.parse()
+    }
+
+
+    open func loadXML(_ url: URL) throws {
+        children.removeAll(keepingCapacity: false)
+        let xmlParser = AEXMLParser(document: self, url: url)
+        try xmlParser.parseFile()
     }
     
     // MARK: - Override

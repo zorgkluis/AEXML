@@ -16,6 +16,7 @@ internal class AEXMLParser: NSObject, XMLParserDelegate {
     
     let document: AEXMLDocument
     let data: Data
+    let url: URL?
     
     var currentParent: AEXMLElement?
     var currentElement: AEXMLElement?
@@ -32,9 +33,20 @@ internal class AEXMLParser: NSObject, XMLParserDelegate {
     init(document: AEXMLDocument, data: Data) {
         self.document = document
         self.data = data
+        self.url = nil
         currentParent = document
         
         super.init()
+    }
+
+
+    init(document: AEXMLDocument, url: URL) {
+        self.document = document
+        self.data = Data()
+        self.url = url
+        currentParent = document
+        super.init()
+        
     }
     
     // MARK: - API
@@ -49,6 +61,23 @@ internal class AEXMLParser: NSObject, XMLParserDelegate {
         
         let success = parser.parse()
         
+        if !success {
+            guard let error = parseError else { throw AEXMLError.parsingFailed }
+            throw error
+        }
+    }
+
+    func parseFile() throws {
+        guard let url = url else { throw AEXMLError.parsingFailed }
+        guard let parser = XMLParser(contentsOf: url) else { throw AEXMLError.parsingFailed }
+
+        parser.delegate = self
+        parser.shouldProcessNamespaces = parserSettings.shouldProcessNamespaces
+        parser.shouldReportNamespacePrefixes = parserSettings.shouldReportNamespacePrefixes
+        parser.shouldResolveExternalEntities = parserSettings.shouldResolveExternalEntities
+
+        let success = parser.parse()
+
         if !success {
             guard let error = parseError else { throw AEXMLError.parsingFailed }
             throw error
