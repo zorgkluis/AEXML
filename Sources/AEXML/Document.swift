@@ -121,7 +121,7 @@ open class AEXMLDocument: AEXMLElement {
     open func loadStream(_ stream: InputStream) throws {
         children.removeAll(keepingCapacity: false)
         let xmlParser = AEXMLParser(document: self, stream: stream)
-        try xmlParser.parseFile()
+        try xmlParser.parseStream()
     }
 
     // MARK: - Override
