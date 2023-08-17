@@ -73,7 +73,13 @@ open class AEXMLDocument: AEXMLElement {
         self.init(options: options)
         try loadXML(url)
     }
-    
+
+    public convenience init(stream: InputStream, options: AEXMLOptions = AEXMLOptions()) throws {
+        self.init(options: options)
+        try loadStream(stream)
+    }
+
+
     /**
         Convenience initializer - used for parsing XML string (by calling `init(xmlData:options:)` internally).
 
@@ -110,7 +116,14 @@ open class AEXMLDocument: AEXMLElement {
         let xmlParser = AEXMLParser(document: self, url: url)
         try xmlParser.parseFile()
     }
-    
+
+
+    open func loadStream(_ stream: InputStream) throws {
+        children.removeAll(keepingCapacity: false)
+        let xmlParser = AEXMLParser(document: self, stream: stream)
+        try xmlParser.parseFile()
+    }
+
     // MARK: - Override
     
     /// Override of `xml` property of `AEXMLElement` - it just inserts XML Document header at the beginning.

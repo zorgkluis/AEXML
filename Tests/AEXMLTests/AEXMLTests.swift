@@ -31,7 +31,7 @@ class AEXMLTests: XCTestCase {
                 fatalError("can't find resource named: '\(fileName)'")
             }
             return url
-        }
+        }        
     }
     
     func xmlDocumentFromURL(url: URL) -> AEXMLDocument {
